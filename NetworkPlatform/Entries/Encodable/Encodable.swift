@@ -7,7 +7,7 @@ protocol DomainConvertibleType {
 }
 
 protocol Identifiable {
-    var uid: String { get }
+    var id: Int { get }
 }
 
 typealias DomainConvertibleCoding = DomainConvertibleType

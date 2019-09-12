@@ -1,4 +1,4 @@
-@testable import CleanArchitectureRxSwift
+@testable import GitHubUser
 import Domain
 import XCTest
 import RxSwift

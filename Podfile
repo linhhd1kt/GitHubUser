@@ -23,6 +23,8 @@ target 'GitHubUser' do
   rx_cocoa
   rx_swift
   pod 'QueryKit'
+  pod 'Kingfisher', '~> 5.0'
+  pod 'SwifterSwift'
   target 'GitHubUserTests' do
     inherit! :search_paths
     test_pods

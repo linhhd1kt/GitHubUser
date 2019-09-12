@@ -1,8 +1,8 @@
-@testable import CleanArchitectureRxSwift
+@testable import GitHubUser
 import Domain
 import RxSwift
 
-class PostNavigatorMock: PostsNavigator {
+class PostNavigatorMock: UsersNavigator {
 
   var toPosts_Called = false
 

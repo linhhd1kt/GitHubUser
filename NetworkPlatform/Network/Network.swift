@@ -1,6 +1,6 @@
 //
 //  Network.swift
-//  CleanArchitectureRxSwift
+//  GitHubUser
 //
 //  Created by Andrey Yastrebov on 16.03.17.
 //  Copyright © 2017 sergdort. All rights reserved.
@@ -29,8 +29,8 @@ final class Network<T: Decodable> {
             .debug()
             .observeOn(scheduler)
             .map({ data -> [T] in
-                return try JSONDecoder().decode([T].self, from: data)
-            })
+				return try JSONDecoder().decode([T].self, from: data)
+			})
     }
 
     func getItem(_ path: String, itemId: String) -> Observable<T> {
@@ -40,7 +40,7 @@ final class Network<T: Decodable> {
             .debug()
             .observeOn(scheduler)
             .map({ data -> T in
-                return try JSONDecoder().decode(T.self, from: data)
+				return try JSONDecoder().decode(T.self, from: data)
             })
     }
 

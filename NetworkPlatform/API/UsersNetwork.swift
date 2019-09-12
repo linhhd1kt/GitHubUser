@@ -1,11 +1,3 @@
-//
-//  UsersNetwork.swift
-//  CleanArchitectureRxSwift
-//
-//  Created by Andrey Yastrebov on 16.03.17.
-//  Copyright © 2017 sergdort. All rights reserved.
-//
-
 import Domain
 import RxSwift
 
@@ -20,7 +12,7 @@ public final class UsersNetwork {
         return network.getItems("users")
     }
 
-    public func fetchUser(userId: String) -> Observable<User> {
-        return network.getItem("users", itemId: userId)
+    public func fetchUser(id: String) -> Observable<User> {
+        return network.getItem("users", itemId: id)
     }
 }

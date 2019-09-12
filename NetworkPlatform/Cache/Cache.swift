@@ -26,7 +26,7 @@ final class Cache<T: Encodable>: AbstractCache where T == T.Encoder.DomainType {
     }
 
     private let path: String
-    private let cacheScheduler = SerialDispatchQueueScheduler(internalSerialQueueName: "com.CleanAchitecture.Network.Cache.queue")
+    private let cacheScheduler = SerialDispatchQueueScheduler(internalSerialQueueName: "com.GitHubUser.Network.Cache.queue")
 
     init(path: String) {
         self.path = path
@@ -39,16 +39,17 @@ final class Cache<T: Encodable>: AbstractCache where T == T.Encoder.DomainType {
                     observer(.completed)
                     return Disposables.create()
                 }
-            let path = url.appendingPathComponent(self.path)
-                .appendingPathComponent("\(object.uid)")
-                .appendingPathComponent(FileNames.objectFileName)
-                .absoluteString
-            
-            if NSKeyedArchiver.archiveRootObject(object.encoder, toFile: path) {
-                observer(.completed)
-            } else {
-                observer(.error(Error.saveObject(object)))
-            }
+            let folderPath = url.appendingPathComponent(self.path)
+                .appendingPathComponent("\(object.id)")
+			self.createDirectoryIfNeeded(at: folderPath)
+            let path = folderPath.appendingPathComponent(FileNames.objectFileName)
+			do {
+				try NSKeyedArchiver.archivedData(withRootObject: object.encoder)
+					.write(to: path)
+				observer(.completed)
+			} catch {
+				observer(.error(error))
+			}
             
             return Disposables.create()
         }.subscribeOn(cacheScheduler)

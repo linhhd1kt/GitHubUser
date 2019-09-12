@@ -1,8 +1,8 @@
-@testable import CleanArchitectureRxSwift
+@testable import GitHubUser
 import RxSwift
 import Domain
 
-class PostsUseCaseMock: Domain.PostsUseCase {
+class PostsUseCaseMock: Domain.UserUseCase {
   var posts_ReturnValue: Observable<[Post]> = Observable.just([])
   var posts_Called = false
   var save_ReturnValue: Observable<Void> = Observable.just(())
@@ -10,7 +10,7 @@ class PostsUseCaseMock: Domain.PostsUseCase {
   var delete_ReturnValue: Observable<Void> = Observable.just(())
   var delete_Called = false
 
-  func posts() -> Observable<[Post]> {
+  func users() -> Observable<[Post]> {
     posts_Called = true
     return posts_ReturnValue
   }
