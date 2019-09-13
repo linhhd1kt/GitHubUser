@@ -3,7 +3,7 @@ import UIKit
 import Domain
 
 protocol DetailUserNavigator {
-    func toPosts()
+    func toUsers()
 }
 
 final class DefaultDetailUserNavigator: DetailUserNavigator {
@@ -13,7 +13,7 @@ final class DefaultDetailUserNavigator: DetailUserNavigator {
         self.navigationController = navigationController
     }
 
-    func toPosts() {
+    func toUsers() {
         navigationController.popViewController(animated: true)
     }
 }

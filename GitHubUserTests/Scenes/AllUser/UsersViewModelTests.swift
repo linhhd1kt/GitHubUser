@@ -11,7 +11,7 @@ enum TestError: Error {
 
 class UsersViewModelTests: XCTestCase {
 	
-	var allUserUseCase: UsersUseCaseMock!
+	var allUserUseCase: UserUseCaseMock!
 	var usersNavigator: UsersNavigatorMock!
 	var viewModel: UsersViewModel!
 	
@@ -20,11 +20,27 @@ class UsersViewModelTests: XCTestCase {
 	override func setUp() {
 		super.setUp()
 		
-		allUserUseCase = UsersUseCaseMock()
+		allUserUseCase = UserUseCaseMock()
 		usersNavigator = UsersNavigatorMock()
 		
 		viewModel = UsersViewModel(useCase: allUserUseCase,
 								   navigator: usersNavigator)
+	}
+	
+	// 1. Write a test to ensure total amount of all users are loaded
+	func test_transform_totalAmounOfAllUser_loaded() {
+		// arrange
+		let trigger = PublishSubject<Void>()
+		let output = viewModel.transform(input: createInput(viewWillAppearTrigger: trigger))
+		allUserUseCase.users_ReturnValue = Observable.just(createUsers())
+		
+		// act
+		output.users.drive().disposed(by: disposeBag)
+		trigger.onNext(())
+		let users = try! output.users.toBlocking().first()!
+		
+		// assert
+		XCTAssertEqual(users.count, 3)
 	}
 	
 	func test_transform_viewWillAppearTriggerInvoked() {
@@ -40,7 +56,6 @@ class UsersViewModelTests: XCTestCase {
 		// assert
 		XCTAssert(allUserUseCase.users_Called)
 	}
-	
 	
 	func test_transform_fetchUser_trackFetching() {
 		// arrange
@@ -77,21 +92,6 @@ class UsersViewModelTests: XCTestCase {
 		XCTAssertNotNil(error)
 	}
 	
-	func test_transform_viewWillAppearTriggerInvoked_mapUsersToViewModels() {
-		// arrange
-		let trigger = PublishSubject<Void>()
-		let output = viewModel.transform(input: createInput(viewWillAppearTrigger: trigger))
-		allUserUseCase.users_ReturnValue = Observable.just(createUsers())
-		
-		// act
-		output.users.drive().disposed(by: disposeBag)
-		trigger.onNext(())
-		let users = try! output.users.toBlocking().first()!
-		
-		// assert
-		XCTAssertEqual(users.count, 3)
-	}
-	
 	func test_transform_selectedUserInvoked_navigateToUser() {
 		// arrange
 		let select = PublishSubject<IndexPath>()
@@ -105,15 +105,15 @@ class UsersViewModelTests: XCTestCase {
 		select.onNext(IndexPath(row: 1, section: 0))
 		
 		// assert
-		XCTAssertTrue(usersNavigator.toUser_user_Called)
-		XCTAssertEqual(usersNavigator.toUser_user_ReceivedArguments, users[1].login)
+		XCTAssertTrue(usersNavigator.toUser_Called)
+		XCTAssertEqual(usersNavigator.toUser_ReceivedArguments, users[1].login)
 	}
 	
 	private func createInput(viewWillAppearTrigger: Observable<Void> = Observable.just(()),
 							 selection: Observable<IndexPath> = Observable.never())
 		-> UsersViewModel.Input {
 			return UsersViewModel.Input(
-				viewWillAppearTrigger: viewWillAppearTrigger.asDriverOnErrorJustComplete(),
+				trigger: viewWillAppearTrigger.asDriverOnErrorJustComplete(),
 				selection: selection.asDriverOnErrorJustComplete())
 	}
 	

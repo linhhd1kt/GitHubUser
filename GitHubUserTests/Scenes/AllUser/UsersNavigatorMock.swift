@@ -4,12 +4,11 @@ import RxSwift
 
 class UsersNavigatorMock: UsersNavigator {
 	
-	var toUser_user_Called = false
-	var toUser_user_ReceivedArguments: String = ""
+	var toUser_Called = false
+	var toUser_ReceivedArguments: String = ""
 	
 	func toUser(_ id: String) {
-		toUser_user_Called = true
-		toUser_user_ReceivedArguments = id
-	}
-	
+		toUser_Called = true
+		toUser_ReceivedArguments = id
+	}	
 }
