@@ -16,7 +16,8 @@ final class DetailUserViewModel: ViewModelType {
 	func transform(input: Input) -> Output {
 		let activityIndicator = ActivityIndicator()
 		let errorTracker = ErrorTracker()
-		let user = input.viewWillAppearTrigger
+		let fetching = activityIndicator.asDriver()
+		let user = input.trigger
 			.withLatestFrom(Driver.just(self.userId))
 				.flatMapLatest { id in
 					return self.useCase.user(id: id)
@@ -25,16 +26,18 @@ final class DetailUserViewModel: ViewModelType {
 						.asDriverOnErrorJustComplete()
 						.map { DetailUserItemViewModel(with: $0) }
 			}
-		return Output(user: user)
+		return Output(user: user,
+		fetching: fetching)
 	}
 }
 
 extension DetailUserViewModel {
 	struct Input {
-		let viewWillAppearTrigger: Driver<Void>
+		let trigger: Driver<Void>
 	}
 	
 	struct Output {
 		let user: Driver<DetailUserItemViewModel>
+		let fetching: Driver<Bool>
 	}
 }

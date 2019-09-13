@@ -32,17 +32,17 @@ target 'GitHubUser' do
 
 end
 
-target 'CoreDataPlatform' do
-  # Comment the next line if you're not using Swift and don't want to use dynamic frameworks
-  use_frameworks!
-  rx_swift
-  pod 'QueryKit'
-  target 'CoreDataPlatformTests' do
-    inherit! :search_paths
-    test_pods
-  end
-
-end
+#target 'CoreDataPlatform' do
+#  # Comment the next line if you're not using Swift and don't want to use dynamic frameworks
+#  use_frameworks!
+#  rx_swift
+#  pod 'QueryKit'
+#  target 'CoreDataPlatformTests' do
+#    inherit! :search_paths
+#    test_pods
+#  end
+#
+#end
 
 target 'Domain' do
   # Comment the next line if you're not using Swift and don't want to use dynamic frameworks
@@ -70,18 +70,18 @@ target 'NetworkPlatform' do
     
 end
 
-target 'RealmPlatform' do
-  # Comment the next line if you're not using Swift and don't want to use dynamic frameworks
-  use_frameworks!
-  rx_swift
-  pod 'RxRealm', '~> 1.0.0'
-  pod 'QueryKit'
-  pod 'RealmSwift', '~> 3.15'
-  pod 'Realm', '~> 3.15'
-
-  target 'RealmPlatformTests' do
-    inherit! :search_paths
-    test_pods
-  end
-
-end
+#target 'RealmPlatform' do
+#  # Comment the next line if you're not using Swift and don't want to use dynamic frameworks
+#  use_frameworks!
+#  rx_swift
+#  pod 'RxRealm', '~> 1.0.0'
+#  pod 'QueryKit'
+#  pod 'RealmSwift', '~> 3.15'
+#  pod 'Realm', '~> 3.15'
+#
+#  target 'RealmPlatformTests' do
+#    inherit! :search_paths
+#    test_pods
+#  end
+#
+#end

@@ -19,7 +19,6 @@ class UsersViewController: UIViewController {
 	
 	private func configureNavigation() {
 		title = "User List"
-		self.navigationItem.backBarButtonItem?.title = ""
 	}
     
     private func configureTableView() {
@@ -37,7 +36,7 @@ class UsersViewController: UIViewController {
             .controlEvent(.valueChanged)
             .asDriver()
         
-        let input = UsersViewModel.Input(viewWillAppearTrigger: Driver.merge(viewWillAppear, pull),
+        let input = UsersViewModel.Input(trigger: Driver.merge(viewWillAppear, pull),
 										 selection: tableView.rx.itemSelected.asDriver())
         let output = viewModel.transform(input: input)
 		

@@ -6,7 +6,7 @@ import RxCocoa
 final class UsersViewModel: ViewModelType {
 
     struct Input {
-        let viewWillAppearTrigger: Driver<Void>
+        let trigger: Driver<Void>
         let selection: Driver<IndexPath>
     }
     struct Output {
@@ -27,7 +27,7 @@ final class UsersViewModel: ViewModelType {
     func transform(input: Input) -> Output {
         let activityIndicator = ActivityIndicator()
         let errorTracker = ErrorTracker()
-		let users = input.viewWillAppearTrigger.flatMapLatest { _ in
+		let users = input.trigger.flatMapLatest { _ in
             return self.useCase.users()
                 .trackActivity(activityIndicator)
                 .trackError(errorTracker)

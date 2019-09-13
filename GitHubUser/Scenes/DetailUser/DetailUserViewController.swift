@@ -5,7 +5,8 @@ import Domain
 
 final class DetailUserViewController: UIViewController {
     private let disposeBag = DisposeBag()
-    
+	
+	@IBOutlet weak var container: UIScrollView!
     @IBOutlet weak var avatar: UIImageView!
     @IBOutlet weak var usernameLabel: UILabel!
     @IBOutlet weak var locationLabel: UILabel!
@@ -19,13 +20,18 @@ final class DetailUserViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 		
+		configureContainer()
 		configureNavigation()
 		bindViewModel()
     }
 	
+	private func configureContainer() {
+		container.refreshControl = UIRefreshControl()
+		container.showsVerticalScrollIndicator = false
+	}
+	
 	private func configureNavigation() {
 		title = "User detail"
-//		self.navigationController?.navigationItem.leftBarButtonItem = UIBarButtonItem(
 	}
 
 	
@@ -34,23 +40,20 @@ final class DetailUserViewController: UIViewController {
 		let viewWillAppear = rx.sentMessage(#selector(UIViewController.viewWillAppear(_:)))
 			.mapToVoid()
 			.asDriverOnErrorJustComplete()
+		let pull = container.refreshControl!.rx
+			.controlEvent(.valueChanged)
+			.asDriver()
 
-		let input = DetailUserViewModel.Input(viewWillAppearTrigger: viewWillAppear)
+		let input = DetailUserViewModel.Input(trigger: Driver.merge(viewWillAppear, pull))
 		let output = viewModel.transform(input: input)
 		
 		output.user
 			.drive(detailUserBinding)
 			.disposed(by: disposeBag)
-//		output.users.drive(tableView.rx.items(cellIdentifier: UserTableViewCell.reuseID, cellType: UserTableViewCell.self)) { tv, viewModel, cell in
-//			cell.bind(viewModel)
-//			}.disposed(by: disposeBag)
-//
-//		output.fetching
-//			.drive(tableView.refreshControl!.rx.isRefreshing)
-//			.disposed(by: disposeBag)
-//		output.selectedUserId
-//			.drive()
-//			.disposed(by: disposeBag)
+
+		output.fetching
+			.drive(container.refreshControl!.rx.isRefreshing)
+			.disposed(by: disposeBag)
 	}
 
     var detailUserBinding: Binder<DetailUserItemViewModel> {
